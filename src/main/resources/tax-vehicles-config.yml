@@ -1,0 +1,16 @@
+vehicles-data:
+  vehicles:
+    - type: "Car"
+      isTaxFree: false
+    - type: "Motorbike"
+      isTaxFree: true
+    - type: "Bus"
+      isTaxFree: true
+    - type: "Emergency"
+      isTaxFree: true
+    - type: "Diplomat"
+      isTaxFree: true
+    - type: "Foreign"
+      isTaxFree: true
+    - type: "Military"
+      isTaxFree: true

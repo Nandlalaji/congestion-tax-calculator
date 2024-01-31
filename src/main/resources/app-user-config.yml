@@ -1,0 +1,6 @@
+users-data:
+  users:
+    - email: test1@gmail.com
+      password: $2a$12$DayH7p3Ht.mND4eQG3RTW.y2zRVNzJ4cHKcaqoMazxCD718vfhNgK #password@123
+    - email: test2@gmail.com
+      password: password@$2a$12$DayH7p3Ht.mND4eQG3RTW.y2zRVNzJ4cHKcaqoMazxCD718vfhNgK #password@123

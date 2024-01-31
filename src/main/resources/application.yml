@@ -1,0 +1,31 @@
+spring:
+  config:
+    import:
+      - "classpath:app-config.yml"
+      - "classpath:tax-fee-config.yml"
+      - "classpath:tax-free-dates-config.yml"
+      - "classpath:tax-vehicles-config.yml"
+      - "classpath:app-user-config.yml"
+
+token:
+  signing:
+    key: 413F4428472B4B6250655368566D5970337336763979244226452948404D6351
+
+management:
+  endpoint:
+    health:
+      group:
+        custom:
+          show-components: always
+          show-details: always
+          include: diskSpace,ping
+
+    web:
+      exposure:
+        include: "*"
+
+
+logging:
+  level:
+    root: INFO
+

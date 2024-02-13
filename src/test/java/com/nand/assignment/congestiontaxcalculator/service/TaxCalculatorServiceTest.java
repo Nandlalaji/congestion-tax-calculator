@@ -4,10 +4,6 @@ import com.nand.assignment.congestiontaxcalculator.config.AppConfig;
 import com.nand.assignment.congestiontaxcalculator.exception.InvalidInputException;
 import com.nand.assignment.congestiontaxcalculator.model.TaxCalculatorRequest;
 import com.nand.assignment.congestiontaxcalculator.service.impl.TaxCalculatorService;
-import com.nand.assignment.congestiontaxcalculator.service.validation.FreeTaxDateCheck;
-import com.nand.assignment.congestiontaxcalculator.service.validation.FreeTaxVehicleCheck;
-import com.nand.assignment.congestiontaxcalculator.service.validation.TaxInputValidator;
-import com.nand.assignment.congestiontaxcalculator.service.validation.TaxValidator;
 import com.nand.assignment.congestiontaxcalculator.utils.AppConstants;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,22 +24,14 @@ import static org.mockito.Mockito.when;
 public class TaxCalculatorServiceTest {
 
     @Mock
-    private TaxValidator taxValidator;
-
-    @Mock
     private ITaxFeeService taxFeeService;
 
     @Mock
     private AppConfig appConfig;
 
     @Mock
-    private TaxInputValidator taxInputValidator;
+   private IValidationService validationService;
 
-    @Mock
-    private FreeTaxVehicleCheck freeTaxVehicleCheck;
-
-    @Mock
-    private FreeTaxDateCheck freeTaxDateCheck;
 
     @InjectMocks
     private TaxCalculatorService taxCalculatorService;
@@ -53,7 +41,7 @@ public class TaxCalculatorServiceTest {
     @DisplayName("Null Vehicle Throws Exception")
     public void testGetTaxWithNullVehicleThrowsException() {
         TaxCalculatorRequest taxCalculatorRequest = new TaxCalculatorRequest("Gothenburg", null, null);
-        doThrow(new InvalidInputException(AppConstants.EXCEPTION_INVALID_VEHICLE)).when(taxValidator).validate(taxCalculatorRequest);
+        doThrow(new InvalidInputException(AppConstants.EXCEPTION_INVALID_VEHICLE)).when(validationService).validate(taxCalculatorRequest);
         InvalidInputException exception = assertThrows(InvalidInputException.class,
                 () -> taxCalculatorService.getTax(taxCalculatorRequest));
         assertEquals(AppConstants.EXCEPTION_INVALID_VEHICLE, exception.getMessage());
@@ -63,7 +51,7 @@ public class TaxCalculatorServiceTest {
     @DisplayName("Free Vehicle has zero fee")
     public void testGetTaxWithFreeVehicle() {
         TaxCalculatorRequest taxCalculatorRequest = new TaxCalculatorRequest("Gothenburg", "Car", null);
-        when(taxValidator.validate(taxCalculatorRequest)).thenReturn(Boolean.TRUE);
+        when(validationService.validate(taxCalculatorRequest)).thenReturn(Boolean.TRUE);
         assertEquals(0, taxCalculatorService.getTax(taxCalculatorRequest).fee());
     }
 
@@ -74,8 +62,8 @@ public class TaxCalculatorServiceTest {
         var taxDateTime = new ArrayList<LocalDateTime>();
         taxDateTime.add(testLocalDateTime);
         TaxCalculatorRequest taxCalculatorRequest = new TaxCalculatorRequest("Gothenburg", "Car", taxDateTime);
-        when(taxValidator.validate(taxCalculatorRequest)).thenReturn(Boolean.FALSE);
-        when(freeTaxDateCheck.checkForTaxFreeDay(testLocalDateTime.toLocalDate())).thenReturn(Boolean.TRUE);
+        when(validationService.validate(taxCalculatorRequest)).thenReturn(Boolean.FALSE);
+        when(validationService.checkForTaxFreeDay(testLocalDateTime.toLocalDate())).thenReturn(Boolean.TRUE);
         assertEquals(0, taxCalculatorService.getTax(taxCalculatorRequest).fee());
     }
 
@@ -89,9 +77,9 @@ public class TaxCalculatorServiceTest {
         taxDateTime.add(holidayLocalDateTime);
         taxDateTime.add(nonHolidayLocalDateTime);
         TaxCalculatorRequest taxCalculatorRequest = new TaxCalculatorRequest("Gothenburg", "Car", taxDateTime);
-        when(taxValidator.validate(taxCalculatorRequest)).thenReturn(Boolean.FALSE);
-        when(freeTaxDateCheck.checkForTaxFreeDay(holidayLocalDateTime.toLocalDate())).thenReturn(Boolean.TRUE);
-        when(freeTaxDateCheck.checkForTaxFreeDay(nonHolidayLocalDateTime.toLocalDate())).thenReturn(Boolean.FALSE);
+        when(validationService.validate(taxCalculatorRequest)).thenReturn(Boolean.FALSE);
+        when(validationService.checkForTaxFreeDay(holidayLocalDateTime.toLocalDate())).thenReturn(Boolean.TRUE);
+        when(validationService.checkForTaxFreeDay(nonHolidayLocalDateTime.toLocalDate())).thenReturn(Boolean.FALSE);
         when(taxFeeService.getTaxFee("gothenburg", nonHolidayLocalDateTime.toLocalTime())).thenReturn(10);
         when(appConfig.getMaxFeePerDay()).thenReturn(50);
         assertEquals(10, taxCalculatorService.getTax(taxCalculatorRequest).fee());
@@ -105,8 +93,8 @@ public class TaxCalculatorServiceTest {
         var taxDateTime = new ArrayList<LocalDateTime>();
         taxDateTime.add(nonHolidayLocalDateTime);
         TaxCalculatorRequest taxCalculatorRequest = new TaxCalculatorRequest("Gothenburg", "Car", taxDateTime);
-        when(taxValidator.validate(taxCalculatorRequest)).thenReturn(Boolean.FALSE);
-        when(freeTaxDateCheck.checkForTaxFreeDay(nonHolidayLocalDateTime.toLocalDate())).thenReturn(Boolean.FALSE);
+        when(validationService.validate(taxCalculatorRequest)).thenReturn(Boolean.FALSE);
+        when(validationService.checkForTaxFreeDay(nonHolidayLocalDateTime.toLocalDate())).thenReturn(Boolean.FALSE);
         when(taxFeeService.getTaxFee("gothenburg", nonHolidayLocalDateTime.toLocalTime())).thenReturn(10);
         when(appConfig.getMaxFeePerDay()).thenReturn(50);
         assertEquals(10, taxCalculatorService.getTax(taxCalculatorRequest).fee());
@@ -122,9 +110,9 @@ public class TaxCalculatorServiceTest {
         taxDateTime.add(nonHolidayLocalDateTime1);
         taxDateTime.add(nonHolidayLocalDateTime2);
         TaxCalculatorRequest taxCalculatorRequest = new TaxCalculatorRequest("Gothenburg", "Car", taxDateTime);
-        when(taxValidator.validate(taxCalculatorRequest)).thenReturn(Boolean.FALSE);
-        when(freeTaxDateCheck.checkForTaxFreeDay(nonHolidayLocalDateTime1.toLocalDate())).thenReturn(Boolean.FALSE);
-        when(freeTaxDateCheck.checkForTaxFreeDay(nonHolidayLocalDateTime2.toLocalDate())).thenReturn(Boolean.FALSE);
+        when(validationService.validate(taxCalculatorRequest)).thenReturn(Boolean.FALSE);
+        when(validationService.checkForTaxFreeDay(nonHolidayLocalDateTime1.toLocalDate())).thenReturn(Boolean.FALSE);
+        when(validationService.checkForTaxFreeDay(nonHolidayLocalDateTime2.toLocalDate())).thenReturn(Boolean.FALSE);
         when(taxFeeService.getTaxFee("gothenburg", nonHolidayLocalDateTime1.toLocalTime())).thenReturn(10);
         when(taxFeeService.getTaxFee("gothenburg", nonHolidayLocalDateTime2.toLocalTime())).thenReturn(20);
         when(appConfig.getMaxFeePerDay()).thenReturn(50);
@@ -141,9 +129,9 @@ public class TaxCalculatorServiceTest {
         taxDateTime.add(nonHolidayLocalDateTime1);
         taxDateTime.add(nonHolidayLocalDateTime2);
         TaxCalculatorRequest taxCalculatorRequest = new TaxCalculatorRequest("Gothenburg", "Car", taxDateTime);
-        when(taxValidator.validate(taxCalculatorRequest)).thenReturn(Boolean.FALSE);
-        when(freeTaxDateCheck.checkForTaxFreeDay(nonHolidayLocalDateTime1.toLocalDate())).thenReturn(Boolean.FALSE);
-        when(freeTaxDateCheck.checkForTaxFreeDay(nonHolidayLocalDateTime2.toLocalDate())).thenReturn(Boolean.FALSE);
+        when(validationService.validate(taxCalculatorRequest)).thenReturn(Boolean.FALSE);
+        when(validationService.checkForTaxFreeDay(nonHolidayLocalDateTime1.toLocalDate())).thenReturn(Boolean.FALSE);
+        when(validationService.checkForTaxFreeDay(nonHolidayLocalDateTime2.toLocalDate())).thenReturn(Boolean.FALSE);
         when(taxFeeService.getTaxFee("gothenburg", nonHolidayLocalDateTime1.toLocalTime())).thenReturn(10);
         when(taxFeeService.getTaxFee("gothenburg", nonHolidayLocalDateTime2.toLocalTime())).thenReturn(20);
         when(appConfig.getMaxFeePerDay()).thenReturn(20);

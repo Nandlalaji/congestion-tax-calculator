@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 /**
  * Send proper error response
  *
- * @author
+ * @author nandlalajisingh@gmail.com
  * @since 1.0
  */
 @ControllerAdvice

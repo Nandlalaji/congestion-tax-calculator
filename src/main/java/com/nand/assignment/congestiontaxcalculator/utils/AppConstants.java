@@ -9,6 +9,6 @@ public class AppConstants {
     public static final String EXCEPTION_DATA_NOT_AVAILABLE = "tax fee data not available";
 
     // App constants
-    public static final int TIME_INTERVAL = 60;
+    public static final int TIME_INTERVAL = 3600;
 
 }

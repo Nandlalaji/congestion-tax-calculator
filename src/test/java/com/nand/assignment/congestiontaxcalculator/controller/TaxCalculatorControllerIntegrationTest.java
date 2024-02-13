@@ -10,7 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -22,13 +21,6 @@ import java.util.Arrays;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@TestPropertySource(locations = {
-        "classpath:app-config.yml",
-        "classpath:tax-fee-config.yml",
-        "classpath:tax-free-dates-config.yml",
-        "classpath:tax-vehicles-config.yml",
-        "classpath:application-test.yml"
-})
 @TestExecutionListeners(listeners = {DependencyInjectionTestExecutionListener.class})
 @ActiveProfiles("test")
 public class TaxCalculatorControllerIntegrationTest {

@@ -16,7 +16,7 @@ import java.util.List;
  * Following the SOLID Principle, this responsibility is removed from main class
  * it is easy to maintain in longer time
  *
- * @author
+ * @author nandlalajisingh@gmail.com
  * @since 1.0
  */
 @Service
@@ -70,13 +70,18 @@ public class TaxFeeService implements ITaxFeeService {
      * @return - boolean value after checking if provided time is under given time slot
      */
     private boolean checkForFeeSlot(TaxFee taxFee, LocalTime time) {
-        int hour = time.getHour();
-        int minute = time.getMinute();
+        LocalTime fromTime, toTime;
+        try {
+            fromTime = LocalTime.parse(taxFee.fromTime());
+            toTime = LocalTime.parse(taxFee.toTime());
+        } catch (Exception ex) {
+            throw new ConfigFileReadException("Date format in tax-fee-config is not correct - "
+                    + ex.getMessage());
+        }
 
-        return (hour > taxFee.fromHour() && hour < taxFee.toHour()) ||
-
-                ((hour == taxFee.toHour() && minute <= taxFee.toMinute()) || (hour == taxFee.fromHour() &&
-                        minute >= taxFee.fromMinute()));
+        return time.equals(fromTime) ||
+                time.equals(toTime) ||
+                time.isAfter(fromTime) && time.isBefore(toTime);
 
     }
 }

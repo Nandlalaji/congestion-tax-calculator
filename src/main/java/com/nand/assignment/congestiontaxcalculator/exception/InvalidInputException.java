@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 /**
  * Custom Exception for input related issue
  *
- * @author
+ * @author nandlalajisingh@gmail.com
  * @since 1.0
  */
 @ResponseStatus(HttpStatus.BAD_REQUEST)

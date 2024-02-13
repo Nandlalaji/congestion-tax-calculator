@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 /**
  * This class deals with checking if provided vehicle is tax Free or not
  *
- * @author
+ * @author nandlalajisingh@gmail.com
  * @since 1.0
  */
 @Service

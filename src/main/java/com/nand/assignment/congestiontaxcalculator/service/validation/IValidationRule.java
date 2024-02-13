@@ -6,7 +6,7 @@ import com.nand.assignment.congestiontaxcalculator.model.TaxCalculatorRequest;
  * This is used to implement many validation without changing TaxValidator class
  * Helpful in implementing chain of Responsibility Design Pattern
  *
- * @author
+ * @author nandlalajisingh@gmail.com
  * @since 1.0
  */
 public interface IValidationRule {

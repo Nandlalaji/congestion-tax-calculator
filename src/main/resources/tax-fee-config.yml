@@ -1,48 +1,30 @@
 tax-fee-data:
   byCity:
     gothenburg:
-      - fromHour: 6
-        toHour: 6
-        fromMinute: 0
-        toMinute: 29
+      - fromTime: "06:00:00"
+        toTime: "06:29:00"
         fee: 8
-      - fromHour: 6
-        toHour: 6
-        fromMinute: 30
-        toMinute: 59
+      - fromTime: "06:30:00"
+        toTime: "06:59:00"
         fee: 13
-      - fromHour: 7
-        toHour: 7
-        fromMinute: 0
-        toMinute: 59
+      - fromTime: "07:00:00"
+        toTime: "07:59:00"
         fee: 18
-      - fromHour: 8
-        toHour: 8
-        fromMinute: 0
-        toMinute: 29
+      - fromTime: "08:00:00"
+        toTime: "08:29:00"
         fee: 13
-      - fromHour: 8
-        toHour: 14
-        fromMinute: 30
-        toMinute: 59
+      - fromTime: "08:29:00"
+        toTime: "14:59:00"
         fee: 8
-      - fromHour: 15
-        toHour: 15
-        fromMinute: 0
-        toMinute: 29
+      - fromTime: "15:00:00"
+        toTime: "15:29:00"
         fee: 13
-      - fromHour: 15
-        toHour: 16
-        fromMinute: 0
-        toMinute: 59
+      - fromTime: "15:30:00"
+        toTime: "16:59:00"
         fee: 18
-      - fromHour: 17
-        toHour: 17
-        fromMinute: 0
-        toMinute: 59
+      - fromTime: "17:00:00"
+        toTime: "17:59:00"
         fee: 13
-      - fromHour: 18
-        toHour: 18
-        fromMinute: 0
-        toMinute: 29
+      - fromTime: "18:00:00"
+        toTime: "18:29:00"
         fee: 8

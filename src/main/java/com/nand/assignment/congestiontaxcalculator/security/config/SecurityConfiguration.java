@@ -35,7 +35,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/actuator/**").permitAll()
                         //   .requestMatchers("v1/congestion-tax/calculate-tax").permitAll()
-                        .requestMatchers("v1/auth/getToken").permitAll()
+                        .requestMatchers("/v1/auth/getToken").permitAll()
                         .requestMatchers("error").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))

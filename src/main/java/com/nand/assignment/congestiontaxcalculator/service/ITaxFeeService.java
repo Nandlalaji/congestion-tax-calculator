@@ -7,7 +7,7 @@ import java.time.LocalTime;
  * Following the SOLID Principle, this responsibility is removed from main class
  * it is easy to maintain in longer time
  *
- * @author
+ * @author nandlalajisingh@gmail.com
  * @since 1.0
  */
 public interface ITaxFeeService {
@@ -15,6 +15,7 @@ public interface ITaxFeeService {
     /**
      * Get Fee for a given time
      *
+     * @param city - city for which fee are provided
      * @param time - input needed to get the tax
      * @return - tax fee for that time
      */

@@ -1,0 +1,7 @@
+spring:
+  config:
+    import:
+      - "classpath:app-config.yml"
+      - "classpath:tax-fee-config.yml"
+      - "classpath:tax-free-dates-config.yml"
+      - "classpath:tax-vehicles-config.yml"

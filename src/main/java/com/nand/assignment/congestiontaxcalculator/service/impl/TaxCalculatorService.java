@@ -5,10 +5,7 @@ import com.nand.assignment.congestiontaxcalculator.model.TaxCalculatorRequest;
 import com.nand.assignment.congestiontaxcalculator.model.TaxCalculatorResponse;
 import com.nand.assignment.congestiontaxcalculator.service.ITaxCalculatorService;
 import com.nand.assignment.congestiontaxcalculator.service.ITaxFeeService;
-import com.nand.assignment.congestiontaxcalculator.service.validation.FreeTaxDateCheck;
-import com.nand.assignment.congestiontaxcalculator.service.validation.FreeTaxVehicleCheck;
-import com.nand.assignment.congestiontaxcalculator.service.validation.TaxInputValidator;
-import com.nand.assignment.congestiontaxcalculator.service.validation.TaxValidator;
+import com.nand.assignment.congestiontaxcalculator.service.IValidationService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -32,33 +29,24 @@ import static com.nand.assignment.congestiontaxcalculator.utils.AppConstants.TIM
  * ---
  * Also chain of responsibility DESIGN PATTERN is used for validation.
  *
- * @author
+ * @author nandlalajisingh@gmail.com
  * @since 1.0
  */
 @Service
 public class TaxCalculatorService implements ITaxCalculatorService {
 
-    private final TaxValidator taxValidator;
-
     private final ITaxFeeService taxFeeService;
+
+    private final IValidationService validationService;
 
     private final AppConfig appConfig;
 
-    private final TaxInputValidator taxInputValidator;
 
-    private final FreeTaxVehicleCheck freeTaxVehicleCheck;
-
-    private final FreeTaxDateCheck freeTaxDateCheck;
-
-    public TaxCalculatorService(TaxValidator taxValidator, ITaxFeeService taxFeeService,
-                                AppConfig appConfig, TaxInputValidator taxInputValidator,
-                                FreeTaxVehicleCheck freeTaxVehicleCheck, FreeTaxDateCheck freeTaxDateCheck) {
-        this.taxValidator = taxValidator;
+    public TaxCalculatorService(ITaxFeeService taxFeeService, IValidationService validationService,
+                                AppConfig appConfig) {
         this.taxFeeService = taxFeeService;
+        this.validationService = validationService;
         this.appConfig = appConfig;
-        this.taxInputValidator = taxInputValidator;
-        this.freeTaxVehicleCheck = freeTaxVehicleCheck;
-        this.freeTaxDateCheck = freeTaxDateCheck;
     }
 
     /**
@@ -70,11 +58,8 @@ public class TaxCalculatorService implements ITaxCalculatorService {
      */
     @Override
     public TaxCalculatorResponse getTax(TaxCalculatorRequest taxCalculatorRequest) {
-        // validate input and free tax
-        taxValidator.registerRule(taxInputValidator);
-        taxValidator.registerRule(freeTaxVehicleCheck);
 
-        if (taxValidator.validate(taxCalculatorRequest)) {
+        if (validationService.validate(taxCalculatorRequest)) {
             return new TaxCalculatorResponse(0); // tax-free vehicle
         }
 
@@ -98,7 +83,7 @@ public class TaxCalculatorService implements ITaxCalculatorService {
     private int getTaxFee(String city, Map<LocalDate, List<LocalDateTime>> dates) {
         var totalFee = 0;
         for (var entry : dates.entrySet()) {
-            if (freeTaxDateCheck.checkForTaxFreeDay(entry.getKey()))
+            if (validationService.checkForTaxFreeDay(entry.getKey()))
                 continue;
             var validTimeList = getValidFeeTimeList(entry.getValue());
             if (validTimeList.isEmpty()) {
@@ -136,7 +121,7 @@ public class TaxCalculatorService implements ITaxCalculatorService {
         int totalFee = 0;
         var intervalFees = new HashSet<Integer>();
         for (var date : timeList) {
-            if (ChronoUnit.MINUTES.between(intervalStart, date) > TIME_INTERVAL) {
+            if (ChronoUnit.SECONDS.between(intervalStart, date) > TIME_INTERVAL) {
                 intervalStart = date;
                 totalFee += Collections.max(intervalFees);
                 intervalFees.clear();

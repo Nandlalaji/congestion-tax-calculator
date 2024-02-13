@@ -23,8 +23,6 @@ public class TaxFeeServiceTest {
     @Mock
     private TaxFeeConfig taxFeeConfig;
 
-    @Mock
-    private AppConfig appConfig;
     @InjectMocks
     private TaxFeeService taxFeeService;
 
@@ -40,8 +38,8 @@ public class TaxFeeServiceTest {
     @DisplayName("Get Tax Fee for a given time for a city")
     public void testGetTaxFeeForValidTime() {
 
-        TaxFee t1 = new TaxFee(6, 6, 0, 29, 12);
-        TaxFee t2 = new TaxFee(14, 14, 0, 59, 10);
+        TaxFee t1 = new TaxFee("06:00:00","06:29:00", 12);
+        TaxFee t2 = new TaxFee("14:00:00","14:59:00", 10);
         var taxFeeList = new ArrayList<TaxFee>();
         taxFeeList.add(t1);
         taxFeeList.add(t2);

@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  * This class deals with checking if provided tax date comes under holiday or weekends
  * if it comes under that days, it will be tax-free day.
  *
- * @author
+ * @author nandlalajisingh@gmail.com
  * @since 1.0
  */
 @Service
